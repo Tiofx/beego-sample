@@ -33,3 +33,4 @@ bee
 
 /src/*
 !/src/WebLabs
+/src/WebLabs/WebLabs
