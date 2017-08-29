@@ -1,0 +1,38 @@
+ul.vertical {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 15%;
+    background-color: #f1f1f1;
+    position: fixed;
+    /*height: 100%;*/
+    min-width: 80px;
+}
+
+ul.vertical li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+ul.vertical li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+ul.vertical a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.afterVertical {
+    margin-left: 25%;
+}
+
+div.afterVertical img {
+    width: 33%;
+    height: 400px;
+    box-sizing: border-box;
+    vertical-align: top;
+}
