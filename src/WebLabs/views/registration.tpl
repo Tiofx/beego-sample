@@ -26,7 +26,7 @@
                     <div class="form-group">
                         <label for="login">Логин</label>
 
-                        <input type="text" class="form-control" id="login" name="login"
+                        <input type="text" class="form-control" id="login" name="login" onblur="frontend_main.check_login(this.value)"
                                placeholder="petr57">
                     </div>
 
@@ -60,4 +60,6 @@
 {{ define "load_resources" }}
     {{ assets_css "/css/lab3/modalDialog.css" }}
     {{ assets_css "/css/lab3/popover.css" }}
+
+    {{ template "all_experimental_libs.tpl" }}
 {{ end }}

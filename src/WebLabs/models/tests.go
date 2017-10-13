@@ -11,19 +11,19 @@ import (
 )
 
 type Tests struct {
-	Id               int64  `orm:"auto" form:"-"`
-	Fio              string `orm:"size(111)" form:"fio"`
-	Group            string `orm:"size(45)" form:"group"`
+	Id    int64  `orm:"auto" form:"-"`
+	Fio   string `orm:"size(111)" form:"fio"`
+	Group string `orm:"size(45)" form:"group"`
 
-	Answer1          string `orm:"size(128);type(text)" form:"answer1"`
-	Answer2          string `orm:"size(45)" form:"answer2"`
-	Answer3          string `orm:"size(45)" form:"answer3"`
+	Answer1 string `orm:"size(128);type(text)" form:"answer1"`
+	Answer2 string `orm:"size(45)" form:"answer2"`
+	Answer3 string `orm:"size(45)" form:"answer3"`
 
 	IsAnswer1Correct bool `orm:"column(isAnswer1Correct);type(tinyint)" form:"-"`
 	IsAnswer2Correct bool `orm:"column(isAnswer2Correct);type(tinyint)" form:"-"`
 	IsAnswer3Correct bool `orm:"column(isAnswer3Correct);type(tinyint)" form:"-"`
 
-	Date             time.Time `orm:"type(datetime)" form:"-"`
+	Date time.Time `orm:"type(datetime)" form:"-"`
 }
 
 func init() {

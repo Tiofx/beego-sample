@@ -8,7 +8,7 @@ import (
 	"time"
 	"html/template"
 	"encoding/json"
-	"github.com/siddontang/go/log"
+
 )
 
 type TestsController struct {
@@ -61,14 +61,14 @@ func (c *TestsController) Post() {
 			}
 		}
 
-		log.Trace(tests)
+		beego.Trace(tests)
 		models.AddTests(&tests)
 
 		c.fill_with_base_data(nil)
 		c.Data["hasError"] = validate.HasErrors()
 
 	} else {
-		log.Error(err)
+		beego.Error(err)
 		c.Data["hasError"] = true
 	}
 }
@@ -106,7 +106,7 @@ func (c *TestsController) fill_with_base_data(tests *models.Tests) {
 
 	} else {
 		testsContent["error"] = err
-		log.Error(err)
+		beego.Error(err)
 	}
 
 }

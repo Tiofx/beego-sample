@@ -10,11 +10,11 @@ import (
 )
 
 type User struct {
-	Id        int64  `orm:"pk; auto" form:"-"`
-	Fio       string `orm:"size(200)" form:"fio"`
-	Email     string `orm:"size(100)" form:"email"`
-	Login     string `orm:"size(45)" form:"login"`
-	Password  string `orm:"size(45)" form:"password"`
+	Id        int64        `orm:"pk; auto" form:"-"`
+	Fio       string       `orm:"size(200)" form:"fio"`
+	Email     string       `orm:"size(100)" form:"email"`
+	Login     string       `orm:"size(45)" form:"login"`
+	Password  string       `orm:"size(45)" form:"password"`
 	AdminList []*AdminList `orm:"reverse(many); rel_table(AdminList)" form:"-"`
 }
 

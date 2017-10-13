@@ -5,10 +5,11 @@ import (
 	"github.com/astaxie/beego/validation"
 	_ "WebLabs/models"
 	"WebLabs/models"
-	"github.com/siddontang/go/log"
+
 	"time"
-	"WebLabs/controllers/blog"
 	"github.com/astaxie/beego/orm"
+	"WebLabs/controllers/util"
+	"encoding/xml"
 )
 
 type AdminController struct {
@@ -53,6 +54,7 @@ func (c *AdminController) BlogEdit() {
 	if c.Ctx.Input.IsPost() {
 		blog := models.Blog{}
 		if err := c.ParseForm(&blog); err == nil {
+			beego.Trace(blog)
 			valid := validation.Validation{}
 			valid.Required(blog.MessageTitle, "messageTitle")
 			valid.Required(blog.Message, "message")
@@ -66,17 +68,87 @@ func (c *AdminController) BlogEdit() {
 					blog.ImagePath = image_path
 				}
 
-				if _, err := models.AddBlog(&blog); err != nil {
-					log.Error(err)
-					c.Data["hasError"] = true
+				if c.Input().Get("blog_id") == "" {
+					if _, err := models.AddBlog(&blog); err != nil {
+						beego.Error(err)
+						c.Data["hasError"] = true
+					}
+
+				} else {
+					if err := models.UpdateBlogById(&blog); err != nil {
+						beego.Error(err)
+						c.Data["hasError"] = true
+					}
 				}
+
 			} else {
 				c.Data["errors"] = valid.Errors
 				c.Data["hasError"] = true
 			}
 		} else {
-			log.Error(err)
+			beego.Error(err)
 			c.Data["hasError"] = true
+		}
+	}
+
+	current_page := func() int {
+		if page, err := c.GetInt("page");
+			err == nil {
+			return page
+
+		} else {
+			beego.Error(err)
+			return 1
+		}
+	}()
+
+	table := models.GetBlogPage(current_page)
+	table["link"] = "admin/blogEdit"
+	c.Data["hasError"] = false
+	c.Data["isFirstTime"] = true
+	c.Data["blog_table"] = table
+}
+
+func (c *AdminController) EditXml() {
+	const file_name = "image"
+
+	blog_id, _ := c.GetInt64("id")
+	blog := models.Blog{
+		Id:           blog_id,
+		Date:         time.Now(),
+		MessageTitle: c.GetString("title"),
+		Message:      c.GetString("review"),
+	}
+	c.ParseForm(&blog)
+	beego.Trace(blog)
+
+	if _, header, err := c.GetFile(file_name); err == nil {
+		image_path := "static/loadImages/" + header.Filename
+		beego.Trace(image_path)
+		if err := c.SaveToFile(file_name, image_path); err == nil {
+			blog.ImagePath = "/" + image_path
+
+		} else {
+			beego.Error(err)
+		}
+
+	} else {
+		beego.Error(err)
+	}
+
+	if err := models.UpdateBlogById(&blog); err != nil {
+		beego.Error(err)
+		c.Ctx.ResponseWriter.Status = 400
+		c.Ctx.WriteString(err.Error())
+
+	} else {
+		if bytes, err := xml.Marshal(&blog); err == nil {
+			c.Ctx.ResponseWriter.Write(bytes)
+
+		} else {
+			beego.Error(err)
+			c.Ctx.ResponseWriter.Status = 400
+			c.Ctx.WriteString(err.Error())
 		}
 	}
 }
@@ -90,7 +162,7 @@ func (c *AdminController) VisitStatistic() {
 	table["link"] = "userVisit"
 	c.Data["user_visit"] = table
 
-	selector := func() blog.PageSelectorInfo {
+	selector := func() util.PageSelectorInfo {
 		if count, err := orm.NewOrm().
 			QueryTable(new(models.UserVisit)).
 			Count();
@@ -101,19 +173,19 @@ func (c *AdminController) VisitStatistic() {
 					current_page = page
 				} else {
 					table["error"] = err
-					log.Error(err)
+					beego.Error(err)
 				}
 				return
 			}()
 
-			selector := blog.PageSelectorInfo{}
+			selector := util.PageSelectorInfo{}
 			selector.Configurate(10, int(count), current_page)
 			table["selector"] = selector
 			return selector
 
 		} else {
 			table["error"] = err
-			log.Error(err)
+			beego.Error(err)
 			panic(err)
 		}
 	}()
@@ -135,6 +207,6 @@ func (c *AdminController) VisitStatistic() {
 
 	} else {
 		table["error"] = err
-		log.Error(err)
+		beego.Error(err)
 	}
 }

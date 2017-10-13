@@ -31,7 +31,7 @@ bee
 *.exe~
 .goxc.local.json
 
-/src/*
-!/src/WebLabs
-/src/WebLabs/WebLabs
+/src/github.com
+/src/golang.org
+/src/src
 /bin/WebLabs

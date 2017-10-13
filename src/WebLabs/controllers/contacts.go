@@ -4,7 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/validation"
 	"regexp"
-	"github.com/siddontang/go/log"
+
 )
 
 type ContactsController struct {
@@ -80,7 +80,7 @@ func (c *ContactsController) Post() {
 		}
 
 	} else {
-		log.Error(err)
+		beego.Error(err)
 		c.Data["hasError"] = true
 	}
 

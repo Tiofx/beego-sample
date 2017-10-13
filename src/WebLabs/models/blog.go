@@ -8,14 +8,17 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	"time"
+	"github.com/astaxie/beego"
+	"WebLabs/controllers/util"
 )
 
 type Blog struct {
-	Id           int64 `orm:"auto" form:"-"`
-	Date         time.Time `orm:"type(datetime)" form:"-"`
-	MessageTitle string `orm:"column(MessageTitle);size(111)" form:"messageTitle"`
-	ImagePath    string `orm:"column(ImagePath);size(123)" form:"-"`
-	Message      string `orm:"type(text)" form:"message"`
+	Id           int64      `orm:"auto" form:"blog_id"`
+	Date         time.Time  `orm:"type(datetime)" form:"-"`
+	MessageTitle string     `orm:"column(MessageTitle);size(111)" form:"messageTitle"`
+	ImagePath    string     `orm:"column(ImagePath);size(123)" form:"-"`
+	Message      string     `orm:"type(text)" form:"message"`
+	Comments     []*Comment `orm:"column(Comment); reverse(many)" form:"-"`
 }
 
 func init() {
@@ -143,4 +146,44 @@ func DeleteBlog(id int64) (err error) {
 		}
 	}
 	return
+}
+
+func GetBlogPage(current_page int) map[string]interface{} {
+	table := make(map[string]interface{})
+
+	if count, err := orm.NewOrm().
+		QueryTable("Blog").
+		Count();
+		err == nil {
+
+		selector := util.PageSelectorInfo{}
+		selector.Configurate(10, int(count), current_page)
+		table["selector"] = selector
+
+		if ml, err := GetAllBlog(
+			nil,
+			nil,
+			[]string{"date"},
+			[]string{"desc"},
+			int64(selector.Offset),
+			int64(selector.Record_number));
+			err == nil {
+
+			table["header"] = []string{
+				"id", "Дата", "Тема сообщения",
+				"Изображение", "Текст сообщения",
+			}
+			table["rows"] = ml
+
+		} else {
+			table["error"] = err
+			beego.Error(err)
+		}
+
+	} else {
+		table["error"] = err
+		beego.Error(err)
+	}
+
+	return table
 }

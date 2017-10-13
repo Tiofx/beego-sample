@@ -6,12 +6,11 @@ import (
 	"github.com/astaxie/beego/context"
 	"WebLabs/controllers/blog"
 	"WebLabs/models"
-	"github.com/siddontang/go/log"
 )
 
 func init() {
-	beego.DelStaticPath("/static")
-	beego.SetStaticPath("/static", "static")
+	//beego.DelStaticPath("/static")
+	//beego.SetStaticPath("/static", "static")
 	beego.SetStaticPath("/js", "static/js")
 	beego.SetStaticPath("/css", "static/css")
 
@@ -52,7 +51,7 @@ func init() {
 					models.AddUserVisit(&visit)
 				}
 			} else {
-				log.Error(err)
+				beego.Error(err)
 			}
 		}
 	})
@@ -61,6 +60,7 @@ func init() {
 	beego.Router("/signOut", &controllers.UserController{}, "POST:SignOut")
 	beego.Router("/registration", &controllers.UserController{}, "GET:RegistrationGet")
 	beego.Router("/registration", &controllers.UserController{}, "POST:RegistrationPost")
+	beego.Router("/checkLogin", &controllers.UserController{}, "POST:RegistrationCheckLogin")
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/index", &controllers.MainController{})
@@ -76,6 +76,8 @@ func init() {
 		beego.NSRouter("/guestBook", &blog.GuestBookController{}),
 		beego.NSRouter("/myBlog", &blog.MyBlogController{}),
 		beego.NSRouter("/blogLoad", &blog.BlogLoadController{}),
+		beego.NSRouter("/blog_comment_form", &blog.CommentFormController{}),
+		//beego.NSRouter("/last_comment", &blog.CommentFormController{}, "GET:GetLastComment"),
 	)
 
 	admin_namespace := beego.NewNamespace("/admin",
@@ -106,6 +108,7 @@ func init() {
 		beego.NSRouter("/index", &controllers.AdminController{}, "GET:Index"),
 		beego.NSRouter("/guestBookLoad", &controllers.AdminController{}, "GET,POST:GuestBookLoad"),
 		beego.NSRouter("/blogEdit", &controllers.AdminController{}, "GET,POST:BlogEdit"),
+		beego.NSRouter("/blog/edit.xml", &controllers.AdminController{}, "POST:EditXml"),
 		beego.NSRouter("/userVisit", &controllers.AdminController{}, "GET:VisitStatistic"),
 	)
 

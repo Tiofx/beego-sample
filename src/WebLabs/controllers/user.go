@@ -3,13 +3,26 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"WebLabs/models"
-	"github.com/siddontang/go/log"
+
 	"github.com/astaxie/beego/validation"
 	"github.com/astaxie/beego/orm"
 )
 
 type UserController struct {
 	beego.Controller
+}
+
+func (c *UserController) RegistrationCheckLogin() {
+	login := c.Input().Get("login")
+	isExist := checkLogin(login)
+	beego.Trace("RegistrationCheckLogin: ", login, isExist)
+
+	if isExist {
+		c.Ctx.WriteString("true")
+
+	} else {
+		c.Ctx.WriteString("false")
+	}
 }
 
 func (c *UserController) RegistrationGet() {
@@ -31,16 +44,13 @@ func (c *UserController) RegistrationPost() {
 	validate := validation.Validation{}
 
 	if err := c.ParseForm(&user_data); err == nil {
-		log.Trace(user_data)
+		beego.Trace(user_data)
 
 		validate.Required(user_data.Login, "login")
 		validate.Required(user_data.Password, "password")
 
 		if !validate.HasErrors() {
-			if orm.NewOrm().
-				QueryTable("User").
-				Filter("login", user_data.Login).
-				Exist() {
+			if checkLogin(user_data.Login) {
 
 				c.Data["errors"] = []map[string]string{
 					{
@@ -52,11 +62,11 @@ func (c *UserController) RegistrationPost() {
 
 			} else {
 				if id, err := models.AddUser(&user_data); err == nil {
-					log.Trace(id, " for ", user_data)
+					beego.Trace(id, " for ", user_data)
 					c.Redirect("/index", 302)
 
 				} else {
-					log.Error(err)
+					beego.Error(err)
 					c.Data["errors"] = []map[string]string{
 						{
 							"Key":     "login",
@@ -72,10 +82,16 @@ func (c *UserController) RegistrationPost() {
 			c.Data["hasError"] = validate.HasErrors()
 		}
 	} else {
-		log.Error(err)
+		beego.Error(err)
 	}
 
 	c.TplName = "registration.tpl"
+}
+func checkLogin(login string) bool {
+	return orm.NewOrm().
+		QueryTable("User").
+		Filter("login", login).
+		Exist()
 }
 
 func (c *UserController) SignIn() {
@@ -84,7 +100,7 @@ func (c *UserController) SignIn() {
 		Login:    c.Input().Get("login"),
 		Password: c.Input().Get("password"),
 	}
-	log.Trace(user)
+	beego.Trace(user)
 	user_err := map[string]interface{}{
 		"isFirstTime": true,
 		"hasError":    true,
@@ -130,18 +146,18 @@ func (c *UserController) SignIn() {
 				"Message": "Логин или пароль не верен",
 			})
 		case 1:
-			log.Trace(all_user)
+			beego.Trace(all_user)
 			c.SetSession("user", all_user[0])
 		default:
 			user_err["errors"] = append(user_err["errors"].([]map[string]string), map[string]string{
 				"Key":     "password",
 				"Message": "Ошибка со стороны БД",
 			})
-			log.Error("Существует более одного пользователя с одними и теми же данными")
+			beego.Error("Существует более одного пользователя с одними и теми же данными")
 		}
 
 	} else {
-		log.Error(err)
+		beego.Error(err)
 	}
 }
 

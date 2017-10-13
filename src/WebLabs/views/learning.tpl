@@ -24,7 +24,7 @@
                     <tr>
                         {{ range . }}
 
-                        <th rowspan="{{ get_from_hr . "rowspan" }}" colspan="{{ get_from_hr . "colspan"}}">
+                        <th rowspan="{{ get_from_hr . "rowspan" }}" colspan="{{ get_from_hr . "colspan" }}">
                             {{ get_from_hr . "title" }}
                         </th>
 
@@ -42,9 +42,16 @@
                         <td>{{ . }}</td>
 
                         {{ end }}
+
                     </tr>
 
                     {{ end }}
+
+                    <tr>
+                        <td>Комментарии</td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
 
                 </table>
 

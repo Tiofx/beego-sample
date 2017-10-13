@@ -10,11 +10,11 @@ import (
 )
 
 type AdminList struct {
-	Id   int64  `orm:"pk; auto"`
+	Id   int64 `orm:"pk; auto"`
 	User *User `orm:"rel(fk); column(userId)"`
 }
 
-func (a *AdminList) TableName() string  {
+func (a *AdminList) TableName() string {
 	return "AdminList"
 }
 

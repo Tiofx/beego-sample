@@ -2,7 +2,6 @@ package blog
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/siddontang/go/log"
 	"encoding/csv"
 	"WebLabs/models"
 	"time"
@@ -35,26 +34,26 @@ func (c *BlogLoadController) Post() {
 					}
 
 					if id, err := models.AddBlog(&blog); err == nil {
-						log.Trace(id, " for ", blog)
+						beego.Trace(id, " for ", blog)
 
 					} else {
 						c.Data["error"] = err
-						log.Error(err)
+						beego.Error(err)
 					}
 				} else {
 					c.Data["error"] = err
-					log.Error(err)
+					beego.Error(err)
 				}
 			}
 
 		} else {
 			c.Data["error"] = err
-			log.Error(err)
+			beego.Error(err)
 		}
 
 	} else {
 		c.Data["error"] = err
-		log.Error(err)
+		beego.Error(err)
 	}
 
 	c.fill_with_base_data()

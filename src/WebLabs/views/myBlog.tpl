@@ -1,6 +1,5 @@
 {{ template "unit/base.tpl" . }}
 {{ define "body" }}
-<body>
 <div class="container">
     <div class="masthead">
 
@@ -8,9 +7,16 @@
         {{ template "unit/nav_bar.tpl" . }}
 
         {{ template "unit/pagable_table.tpl" .blog_table }}
+
+        <br>
+
+        <iframe src="blog_comment_form" frameborder="0" width="1000" height="400"
+                id="input_form" style="visibility: hidden;">
+        </iframe>
+
+        <br>
     </div>
 </div>
-</body>
 {{ end }}
 
 {{ define "load_resources" }}
@@ -20,4 +26,10 @@
     {{ assets_js "/js/lab7/signInForm.js" }}
     {{ assets_js "/js/lab6/guestBookTable.js" }}
     {{ assets_js "/js/lab6/pageSelector.js" }}
+
+    {{ template "all_experimental_libs.tpl" }}
 {{ end }}
+
+<script type="text/javascript">
+    frontend_main.add_button_for_each_row();
+</script>

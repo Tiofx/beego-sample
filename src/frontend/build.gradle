@@ -1,0 +1,88 @@
+group 'kotlinJsDelete2'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext {
+        kotlin_version = '1.1.4-2'
+        kotlinx_html_version = "0.6.4"
+    }
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin2js'
+apply plugin: 'kotlin-dce-js'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version"
+}
+
+def jsRelativePath = "js/experimental"
+def jsDestination = "${projectDir.parent}/WebLabs/static/$jsRelativePath"
+def libsImporterDestination = "${projectDir.parent}/WebLabs/views"
+
+compileKotlin2Js.kotlinOptions {
+//    outputFile = "$projectDir/web/frontend_main.js"
+//    moduleKind = "amd"
+    sourceMap = true
+}
+
+runDceKotlinJs.keep "frontend_main.append_comment_to_blog",
+        "frontend_main.hideIframe",
+        "frontend_main.add_button_for_each_row",
+        "frontend_main.change_record_buttons",
+        "frontend_main.send_xml",
+        "frontend_main.check_login"
+
+build.doLast {
+    configurations.compile.each { File file ->
+        copy {
+            includeEmptyDirs = false
+
+            from zipTree(file.absolutePath)
+            into jsDestination
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                def result = path.endsWith(".js") &&
+                        (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+
+                result
+            }
+        }
+    }
+
+    tasks.copyMinimazeFile.execute()
+}
+
+task copyMinimazeFile(type: Copy) {
+    def listOfLibs = new ArrayList<String>()
+
+    from "$projectDir/build/classes/main/min"
+    rename "frontend_main.js", "main.js"
+    into jsDestination
+
+    new File(jsDestination).listFiles().each { file ->
+        def path = file.name
+        def result = path.endsWith(".js")
+        if (result) listOfLibs.add path
+        result
+    }
+
+    def result = new File(libsImporterDestination, "all_experimental_libs.tpl").newWriter()
+
+    listOfLibs.each { libName ->
+        result.append "{{ assets_js \"/$jsRelativePath/$libName\" }}\n"
+    }
+    result.close()
+}

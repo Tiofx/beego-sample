@@ -7,6 +7,8 @@
         {{ template "unit/header.tpl" . }}
         {{ template "unit/nav_bar.tpl" . }}
 
+        {{ template "unit/pagable_table.tpl" .blog_table }}
+
         <hr>
 
         <section>
@@ -14,7 +16,10 @@
             <div class="container-fluid">
                 <h3>Новая запись:</h3>
                 <hr>
-                <form method="post" enctype="multipart/form-data" name="mainForm">
+                <form method="post" enctype="multipart/form-data" name="mainForm" onsubmit="return false">
+
+                    <input type="hidden" name="blog_id" id="blog_id" value=""/>
+
                     <div class="form-group">
                         <label for="messageTitle">Тема сообщения:</label>
 
@@ -33,7 +38,8 @@
                                   placeholder="Мне понравился ваш сайт. Зайду еще много раз" name="message"></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-default btn btn-primary" id="submit">
+                    <button type="submit" class="btn btn-default btn btn-primary" id="submit"
+                            onclick="frontend_main.send_xml()">
                         Отправить
                     </button>
 
@@ -49,15 +55,16 @@
             {{ template "unit/error.tpl" . }}
 
         </section>
-
     </div>
 </div>
 {{ end }}
 
 {{ define "load_resources" }}
-    {{ assets_js "/js/lab3/realTimeValidation.js" }}
 
-    {{ assets_css "/css/lab3/calendarDay.css" }}
-    {{ assets_css "/css/lab3/modalDialog.css" }}
     {{ assets_css "/css/lab3/popover.css" }}
+    {{ template "all_experimental_libs.tpl" }}
 {{ end }}
+
+<script type="text/javascript">
+    frontend_main.change_record_buttons();
+</script>
