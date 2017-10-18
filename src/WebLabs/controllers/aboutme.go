@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"WebLabs/controllers/util"
 )
 
 // AboutMeController operations for AboutMe
@@ -10,9 +11,11 @@ type AboutMeController struct {
 }
 
 func (context *AboutMeController) Get() {
-	context.Data["header"] = "Обо мне"
-	context.Data["ref"] = "aboutMe"
-	context.Data["biography"] = `Ну,родился я,-значит(а может и не родился),-такого-то числа,такого-то
+	renderer := util.HamlRenderer{Scope: make(map[string]interface{})}
+
+	renderer.Scope["header"] = "Обо мне"
+	renderer.Scope["ref"] = "aboutMe"
+	renderer.Scope["biography"] = `Ну,родился я,-значит(а может и не родился),-такого-то числа,такого-то
 	месяца,такого-то года,жил(а может и не жил)там-то и там-то,и там-то и там-то...
 	(в общем,-долго(а может и не долго)перечислять,короче,-на вопрос:-"Откуда вы?",могу
 	честно ответить:-"Из разных мест"),так-то и так-то(а может и не так),думал то-то и то-то,делал
@@ -26,5 +29,6 @@ func (context *AboutMeController) Get() {
 	тот-то(а может и
 	не тот-то и тот-то)не обидится на меня так-то и так-то(а может и не так-то и не так-то).`
 
-	context.TplName = "aboutMe.tpl"
+	renderer.BaseScope(&context.Controller)
+	renderer.RenderToContext("/aboutMe.hml", &context.Controller)
 }

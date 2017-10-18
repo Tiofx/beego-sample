@@ -11,8 +11,7 @@ import kotlin.js.Json
 
 @JsName("send_xml")
 fun sendXML() {
-    document
-            .run { fromForm() }
+    document.run { fromForm() }
             .apply { console.log(this) }
             .let {
                 XMLHttpRequest().run {

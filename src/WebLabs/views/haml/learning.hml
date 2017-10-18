@@ -1,0 +1,19 @@
+%doctype
+%html
+    = view.head
+    %body
+        .container
+            .masthead
+                = view.header
+                = view.nav_bar
+                %hr/
+                %section
+                    %h2.text-center Севастопольский государственный университет
+                    %h3.text-center Институт Информационных систем
+                    %hr/
+                    %h4 Перечень изучаемых дистиплин
+                    .table-responsive
+                        %table.table.table-bordered.table-condensed
+                            = view.table
+    %link{:href => "static/css/tableHeadAlign.css", :rel => "stylesheet"}
+    = view.sign_form

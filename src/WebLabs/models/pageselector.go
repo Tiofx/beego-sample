@@ -1,4 +1,4 @@
-package util
+package models
 
 type PageSelectorInfo struct {
 	Max_page int

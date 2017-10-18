@@ -47,12 +47,6 @@
 
                     {{ end }}
 
-                    <tr>
-                        <td>Комментарии</td>
-                        <td colspan="4">
-                        </td>
-                    </tr>
-
                 </table>
 
             </div>

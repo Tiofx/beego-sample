@@ -9,7 +9,6 @@ import (
 	"github.com/astaxie/beego/orm"
 	"time"
 	"github.com/astaxie/beego"
-	"WebLabs/controllers/util"
 )
 
 type Blog struct {
@@ -156,7 +155,7 @@ func GetBlogPage(current_page int) map[string]interface{} {
 		Count();
 		err == nil {
 
-		selector := util.PageSelectorInfo{}
+		selector := PageSelectorInfo{}
 		selector.Configurate(10, int(count), current_page)
 		table["selector"] = selector
 

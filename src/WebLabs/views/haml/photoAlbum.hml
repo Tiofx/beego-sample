@@ -1,0 +1,17 @@
+%doctype
+%html
+    = view.head
+    %body
+        .container
+            .masthead
+                = view.header
+                = view.nav_bar
+                %hr/
+                %section
+                %h3 Картинки
+                #allImageContainer.container-fluid
+                    = view.all_image_row
+= view.sign_form
+%link{:href => "/css/lab3/bigPhoto.css", :ref => "stylesheet"}
+%script{:type=>"text/javascript", :src => "/js/lab3/photoGrow.js"} stab
+%script{:type=>"text/javascript", :src => "/js/task/lab4/sortImage.js"} stab

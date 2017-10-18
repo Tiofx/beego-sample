@@ -30,6 +30,8 @@
     {{ template "all_experimental_libs.tpl" }}
 {{ end }}
 
-<script type="text/javascript">
-    frontend_main.add_button_for_each_row();
-</script>
+{{ if .user }}
+    <script type="text/javascript">
+        frontend_main.add_button_for_each_row();
+    </script>
+{{ end }}

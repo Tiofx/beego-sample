@@ -1,0 +1,27 @@
+%doctype
+%html
+    = view.head
+    %body
+        .container
+            .container
+                = view.header
+                = view.nav_bar
+                %hr/
+                %section
+                    .media
+                        .media-left
+                            %img.img-rounded{:src => "/static/img/camera_200.png", :alt => "Моя фотография"}
+                        .media-body
+                            %h3.media-heading Фамилия Имя Отчество
+                            Группа:
+                            %abbr{:title => "Информационные системы/бюджет-41-очное отделение обучения"} ИС/б-41-о
+                            %br/
+                            %hr/
+                            .text-center
+                                %h4 Лабораторная работа №9 WEB
+                            %br/
+                            .text-center
+                                %h5 Исследование возможностей замеделения разработки веб-приложений с использованием HAML.
+                            %br/
+                            %hr/
+    = view.sign_form

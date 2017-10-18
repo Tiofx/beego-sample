@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"WebLabs/controllers/util"
 )
 
 type MainController struct {
@@ -9,7 +10,10 @@ type MainController struct {
 }
 
 func (c *MainController) Get() {
-	c.Data["header"] = "Главная страница"
-	c.Data["ref"] = "index"
-	c.TplName = "index.tpl"
+	renderer := util.HamlRenderer{Scope: make(map[string]interface{})}
+	renderer.Scope["header"] = "Главная страница"
+	renderer.Scope["ref"] = "index"
+
+	renderer.BaseScope(&c.Controller)
+	renderer.RenderToContext("/index.hml", &c.Controller)
 }

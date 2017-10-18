@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/validation"
 	"regexp"
 
+	"WebLabs/controllers/util"
 )
 
 type ContactsController struct {
@@ -87,11 +88,14 @@ func (c *ContactsController) Post() {
 }
 
 func (c *ContactsController) fill_with_base_data(user *user) {
-	c.Data["header"] = "Контакты"
-	c.Data["ref"] = "contacts"
-	c.Data["contact"] = user
-	c.Data["hasError"] = false
-	c.Data["isFirstTime"] = false
+	renderer := util.HamlRenderer{Scope: make(map[string]interface{})}
 
-	c.TplName = "contacts.tpl"
+	renderer.Scope["header"] = "Контакты"
+	renderer.Scope["ref"] = "contacts"
+	renderer.Scope["contact"] = user
+	renderer.Scope["hasError"] = false
+	renderer.Scope["isFirstTime"] = false
+
+	renderer.BaseScope(&c.Controller)
+	renderer.RenderToContext("/contacts.hml", &c.Controller)
 }

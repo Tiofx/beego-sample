@@ -6,6 +6,8 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/astaxie/beego/logs"
+	"path/filepath"
+	"os"
 )
 
 func init() {
@@ -19,6 +21,14 @@ func init() {
 		"default",
 		"mysql",
 		"root:root@(127.0.0.1:8889)/Web6?charset=utf8")
+
+	root_path, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		beego.Error(err)
+	} else {
+		beego.AppConfig.Set("root_path", root_path)
+		beego.Trace(root_path)
+	}
 }
 
 func main() {

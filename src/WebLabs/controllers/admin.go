@@ -8,7 +8,6 @@ import (
 
 	"time"
 	"github.com/astaxie/beego/orm"
-	"WebLabs/controllers/util"
 	"encoding/xml"
 )
 
@@ -162,7 +161,7 @@ func (c *AdminController) VisitStatistic() {
 	table["link"] = "userVisit"
 	c.Data["user_visit"] = table
 
-	selector := func() util.PageSelectorInfo {
+	selector := func() models.PageSelectorInfo {
 		if count, err := orm.NewOrm().
 			QueryTable(new(models.UserVisit)).
 			Count();
@@ -178,7 +177,7 @@ func (c *AdminController) VisitStatistic() {
 				return
 			}()
 
-			selector := util.PageSelectorInfo{}
+			selector := models.PageSelectorInfo{}
 			selector.Configurate(10, int(count), current_page)
 			table["selector"] = selector
 			return selector

@@ -2,7 +2,8 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"strconv"
+	"WebLabs/controllers/util"
+	"bytes"
 )
 
 // LearningController operations for Learning
@@ -16,57 +17,32 @@ type th struct {
 	title   string
 }
 
-func init() {
-	beego.AddFuncMap(
-		"get_from_hr",
-		func(value interface{}, access string) string {
-			switch value.(type) {
-
-			case th:
-				switch data := value.(th); access {
-
-				case "rowspan":
-					return strconv.Itoa(data.rowspan)
-
-				case "colspan":
-					return strconv.Itoa(data.colspan)
-
-				case "title":
-					return data.title
-
-				default:
-					return "unknown accessor"
-				}
-
-			default:
-				return "error"
-			}
-		})
-}
-
 func (c *LearningController) Get() {
-	c.Data["header"] = "Учеба"
-	c.Data["ref"] = "learning"
+	var scope = make(map[string]interface{})
+	renderer := util.HamlRenderer{scope}
 
-	c.Data["table"] = map[string][][]interface{}{
+	renderer.Scope["header"] = "Учеба"
+	renderer.Scope["ref"] = "learning"
+
+	renderer.Scope["table"] = map[string][][]interface{}{
 		"header": {
 			{
-				th{rowspan: 4, title: "№"},
-				th{rowspan: 4, title: "Дисциплина"},
-				th{colspan: 12, title: "Часов в неделю"},
+				th{rowspan: 4, colspan: 1, title: "№"},
+				th{rowspan: 4, colspan: 1, title: "Дисциплина"},
+				th{rowspan: 1, colspan: 12, title: "Часов в неделю"},
 			},
 			{
-				th{colspan: 12, title: "(Лекций, Лаб.раб, Практ.раб.)"},
+				th{rowspan: 1, colspan: 12, title: "(Лекций, Лаб.раб, Практ.раб.)"},
 			},
 			{
-				th{colspan: 6, title: "1 курс"},
-				th{colspan: 6, title: "2 курс"},
+				th{rowspan: 1, colspan: 6, title: "1 курс"},
+				th{rowspan: 1, colspan: 6, title: "2 курс"},
 			},
 			{
-				th{colspan: 3, title: "1 сем"},
-				th{colspan: 3, title: "2 сем"},
-				th{colspan: 3, title: "1 сем"},
-				th{colspan: 3, title: "2 сем"},
+				th{rowspan: 1, colspan: 3, title: "1 сем"},
+				th{rowspan: 1, colspan: 3, title: "2 сем"},
+				th{rowspan: 1, colspan: 3, title: "1 сем"},
+				th{rowspan: 1, colspan: 3, title: "2 сем"},
 			},
 		},
 		"rows": {
@@ -150,5 +126,66 @@ func (c *LearningController) Get() {
 		},
 	}
 
-	c.TplName = "learning.tpl"
+	renderer.BaseScope(&c.Controller)
+	renderer.Scope["view"].(map[string]interface{})["table"] = table(&renderer)
+	renderer.RenderToContext("/learning.hml", &c.Controller)
+}
+
+func table(r *util.HamlRenderer) (result map[string]interface{}) {
+	result = make(map[string]interface{})
+	var buffer bytes.Buffer
+
+	table_model := r.Scope["table"].(map[string][][]interface{})
+	header := table_model["header"]
+	rows := table_model["rows"]
+
+	for _, row := range header {
+		for _, cell := range row {
+			head_cell := cell.(th)
+			renderer := util.HamlRenderer{Scope: map[string]interface{}{
+				"rowspan": head_cell.rowspan,
+				"colspan": head_cell.colspan,
+				"title":   head_cell.title,
+			}}
+
+			buffer.WriteString(
+				renderer.RenderOrPanic("/unit/table/header_cell.hml"),
+			)
+		}
+
+		all_cell := buffer.String()
+		buffer.Reset()
+		r := util.HamlRenderer{Scope: map[string]interface{}{
+			"all_cell": all_cell,
+		}}
+		buffer.WriteString(
+			r.RenderOrPanic("/unit/table/row.hml"),
+		)
+	}
+	result["header"] = buffer.String()
+	buffer.Reset()
+
+	for _, row := range rows {
+		for _, cell := range row {
+			renderer := util.HamlRenderer{Scope: map[string]interface{}{
+				"title": cell,
+			}}
+
+			buffer.WriteString(
+				renderer.RenderOrPanic("/unit/table/cell.hml"),
+			)
+		}
+
+		all_cell := buffer.String()
+		buffer.Reset()
+		r := util.HamlRenderer{Scope: map[string]interface{}{
+			"all_cell": all_cell,
+		}}
+		buffer.WriteString(
+			r.RenderOrPanic("/unit/table/row.hml"),
+		)
+	}
+	result["rows"] = buffer.String()
+
+	return
 }

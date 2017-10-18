@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"WebLabs/controllers/util"
+	"bytes"
+	"fmt"
 )
 
 type PhotoAlbumController struct {
@@ -15,25 +18,16 @@ func init() {
 			res = one % two
 			return
 		})
-
-	beego.AddFuncMap(
-		"plus",
-		func(one, two int) int {
-			return one + two
-		})
-
-	beego.AddFuncMap(
-		"minus",
-		func(one, two int) int {
-			return one - two
-		})
 }
 
 func (c *PhotoAlbumController) Get() {
-	c.Data["header"] = "Фото альбом"
-	c.Data["ref"] = "photoAlbum"
+	var scope = make(map[string]interface{})
+	renderer := util.HamlRenderer{scope}
 
-	c.Data["photo_album"] = map[string]interface{}{
+	renderer.Scope["header"] = "Фото альбом"
+	renderer.Scope["ref"] = "photoAlbum"
+
+	renderer.Scope["photo_album"] = map[string]interface{}{
 		"col_num":         4,
 		"image_number":    15,
 		"base_image_path": "static/img/photoAlbum",
@@ -57,5 +51,43 @@ func (c *PhotoAlbumController) Get() {
 		},
 	}
 
-	c.TplName = "photoAlbum.tpl"
+	renderer.BaseScope(&c.Controller)
+	renderer.Scope["view"].(map[string]interface{})["all_image_row"] = all_image_row(&renderer)
+	renderer.RenderToContext("/photoAlbum.hml", &c.Controller)
+}
+
+func all_image_row(r *util.HamlRenderer) string {
+	var buffer bytes.Buffer
+
+	photo_album_model := r.Scope["photo_album"].(map[string]interface{})
+	titles := photo_album_model["titles"].([]string)
+	var local_buffer bytes.Buffer
+	for i, title := range titles {
+		renderer := util.HamlRenderer{Scope: map[string]interface{}{
+			"src": fmt.Sprintf(
+				photo_album_model["image_format"].(string),
+				photo_album_model["base_image_path"],
+				i+1),
+			"alt":   title,
+			"title": title,
+			"index": i,
+		}}
+
+		local_buffer.WriteString(
+			renderer.RenderOrPanic("/unit/photoAlbum/image.hml"),
+		)
+
+		if (i+1)%photo_album_model["col_num"].(int) == 0 {
+			images_row := local_buffer.String()
+			local_buffer.Reset()
+			hamlRenderer := util.HamlRenderer{Scope: map[string]interface{}{
+				"images_row": images_row,
+			}}
+			buffer.WriteString(
+				hamlRenderer.RenderOrPanic("/unit/photoAlbum/row.hml"),
+			)
+		}
+	}
+
+	return buffer.String()
 }

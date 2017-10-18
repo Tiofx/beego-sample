@@ -1,0 +1,4 @@
+%script{:type=>"text/javascript", :src => "/js/jquery-3.2.0.js"} stab
+%script{:type=>"text/javascript", :src => "/js/lab3/main.js"} stab
+%script{:type=>"text/javascript", :src => "/js/lab7/signInForm.js"} stab
+%script{:type=>"text/javascript", :src => "/js/lab3/realTimeValidation.js"} stab
