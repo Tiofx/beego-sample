@@ -132,5 +132,6 @@
 {{ end }}
 
 {{ define "load_resources" }}
-{{ asset_js  "all" }}
+    {{ asset_js  "all" }}
+    {{ asset_css  "all_style" }}
 {{ end }}

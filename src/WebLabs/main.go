@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/saturn4er/beego-assets"
+	_ "github.com/saturn4er/beego-assets/scss"
 	_ "github.com/saturn4er/beego-assets/coffee"
 	"github.com/astaxie/beego/logs"
 	"path/filepath"

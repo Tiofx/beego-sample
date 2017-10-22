@@ -18,5 +18,6 @@
 {{ end }}
 
 {{ define "load_resources" }}
-
+    {{ asset_css  "all_style" }}
+    {{ asset_js "all" }}
 {{ end }}

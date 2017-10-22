@@ -26,3 +26,4 @@
                             %hr/
     = view.sign_form
     = view.coffee
+    = view.scss

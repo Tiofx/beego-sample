@@ -1,0 +1,53 @@
+$third: 100%/3;
+%absolute_position {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modalBackground {
+  @extend %absolute_position;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .6);
+
+  z-index: 999;
+  border: 5px solid forestgreen;
+}
+
+.modalDialogContainer {
+  @extend %absolute_position;
+  height: 32%;
+  width: 44%;
+  background: white;
+  border: 10px solid brown;
+
+  .question {
+    padding: 10px;
+    text-align: center;
+    font-size: 22px;
+    height: 40%;
+    width: 100%;
+  }
+
+  .button {
+    text-align: center;
+    background: lightblue;
+    height: 30%;
+    width: $third;
+    border: 3px solid black;
+    padding: 3% 3% 6%;
+    margin: 5%;
+    cursor: pointer;
+    font: 31px bold;
+  }
+}
+
+.yes {
+  float: left;
+}
+
+.no {
+  float: right;
+}

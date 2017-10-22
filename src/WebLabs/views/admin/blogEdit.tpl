@@ -60,8 +60,8 @@
 {{ end }}
 
 {{ define "load_resources" }}
-
-    {{ assets_css "/css/lab3/popover.css" }}
+    {{ asset_css  "all_style" }}
+    {{ asset_js  "all" }}
     {{ template "all_experimental_libs.tpl" }}
 {{ end }}
 

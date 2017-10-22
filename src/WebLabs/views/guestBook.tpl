@@ -59,7 +59,5 @@
 
 {{ define "load_resources" }}
     {{ asset_js  "all" }}
-    {{ assets_css "/css/lab3/modalDialog.css" }}
-    {{ assets_css "/css/lab3/popover.css" }}
-    {{ assets_css "/css/lab3/calendarDay.css" }}
+    {{ asset_css  "all_style" }}
 {{ end }}

@@ -1,0 +1,52 @@
+$zero: 0;
+$photo_background: #f1f1f1;
+$ref_color: #000;
+$hover_background: #555;
+$active_background: #4CAF50;
+
+%link {
+  color: white;
+}
+
+ul.vertical {
+  position: fixed;
+  width: 15%;
+  min-width: 80px;
+  margin: $zero;
+  padding: $zero;
+  background-color: $photo_background;
+  list-style-type: none;
+
+  li {
+    a {
+      padding: 8px 16px;
+      color: $ref_color;
+      display: block;
+      text-decoration: none;
+
+      &:hover:not(.active) {
+        @extend %link;
+        background-color: $hover_background;
+      }
+
+      &.active {
+        @extend %link;
+        background-color: $active_background;
+      }
+    }
+  }
+}
+
+.afterVertical {
+  margin-left: 25%;
+}
+
+div.afterVertical img {
+  $width: 33%;
+  $height: 400px;
+
+  width: $width;
+  height: $height;
+  box-sizing: border-box;
+  vertical-align: top;
+}

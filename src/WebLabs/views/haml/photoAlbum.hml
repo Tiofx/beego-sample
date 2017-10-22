@@ -12,6 +12,7 @@
                 #allImageContainer.container-fluid
                     = view.all_image_row
     = view.coffee
+    = view.scss
     = view.sign_form
     %link{:href => "/css/lab3/bigPhoto.css", :rel => "stylesheet"}
     %script{:type=>"text/javascript", :src => "/js/lab3/photoGrow.js"} stab

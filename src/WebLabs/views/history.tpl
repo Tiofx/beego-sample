@@ -18,7 +18,7 @@
 {{ end }}
 
 {{ define "load_resources" }}
-    {{ assets_css "/css/tableHeadAlign.css" }}
     {{ assets_js "/js/lab3/history.js" }}
     {{ asset_js  "all" }}
+    {{ asset_css  "all_style" }}
 {{ end }}

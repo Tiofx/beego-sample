@@ -1,0 +1,44 @@
+$cell_size: 7;
+$margin_between_cells: 1%;
+%size {
+  width: 100%/$cell_size - 2*$margin_between_cells;
+  margin: $margin_between_cells;
+  float: left;
+}
+
+.calendar {
+  $min_width: 200px;
+
+  position: absolute;
+  background: lightgray;
+  clear: left;
+  z-index: 999;
+  border: 3px solid cadetblue;
+  min-width: $min_width;
+  max-width: $min_width+100px;
+  display: none;
+}
+
+.calendarRow {
+  div {
+    @extend %size;
+    padding: 1%;
+    border: 1px solid gray;
+    background-color: white;
+    color: green;
+    text-align: right;
+
+    &.emptyElement {
+      @extend %size;
+      visibility: hidden;
+    }
+  }
+}
+
+.calendarHeader {
+  div {
+    @extend %size;
+    text-align: center;
+    font-weight: bold;
+  }
+}

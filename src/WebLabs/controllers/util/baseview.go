@@ -25,12 +25,24 @@ func (r *HamlRenderer) BaseScope(c *beego.Controller) {
 		"css_import": r.RenderOrPanic("/unit/css_import.hml"),
 		"js_import":  r.RenderOrPanic("/unit/js_import.hml"),
 		"coffee":     coffee(c),
+		"scss":       scss(c),
 		"header":     r.RenderOrPanic("/unit/header.hml"),
 		"nav_bar":    Nav_bar(r.Scope["ref"].(string), user),
 		"sign_form":  Sign_form(user),
 	}
 	r.Scope["view"].(map[string]interface{})["head"] =
 		r.RenderOrPanic("/unit/head.hml")
+}
+
+func scss(c *beego.Controller) string {
+	c.TplName = "unit/scss_import.tpl"
+	if scss, err := c.RenderString(); err != nil {
+		return scss
+
+	} else {
+		beego.Error(err)
+		return scss
+	}
 }
 
 func coffee(c *beego.Controller) string {
