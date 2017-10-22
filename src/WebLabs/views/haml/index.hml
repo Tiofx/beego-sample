@@ -25,3 +25,4 @@
                             %br/
                             %hr/
     = view.sign_form
+    = view.coffee

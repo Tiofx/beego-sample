@@ -36,3 +36,6 @@ bee
 /src/src
 /bin/WebLabs
 /src/WebLabs/static/js/experimental/
+/src/WebLabs/static/temp/
+
+src/WebLabs/.DS_Store

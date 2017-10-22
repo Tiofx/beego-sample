@@ -40,6 +40,6 @@
 </div>
 </body>
 {{ template "unit/sign_form.tpl" . }}
-
+{{ asset_js  "all" }}
 {{ assets_css "/css/verticalNavBar.css" }}
 </html>

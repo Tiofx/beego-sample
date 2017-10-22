@@ -1,10 +1,6 @@
 $(document).ready(function () {
     $.when(
-        $.getScript('/js/lab3/cookie.js'),
-        $.getScript('/js/lab3/backGroundImage.js'),
         $.getScript('/js/lab3/realTimeValidation.js'),
-        $.getScript('/js/lab3/dropDown.js'),
-        $.getScript('/js/lab3/timer.js'),
         $.getScript('/js/lab3/modalDialog.js')
     ).done(function () {
         main();
@@ -13,11 +9,6 @@ $(document).ready(function () {
 
 function main() {
     incrementPageVisit();
-
-    setUpListenersForDropDown();
-    setUpListenersForBackGround();
-
-    updateDate();
 }
 
 function incrementPageVisit() {

@@ -24,12 +24,24 @@ func (r *HamlRenderer) BaseScope(c *beego.Controller) {
 	r.Scope["view"] = map[string]interface{}{
 		"css_import": r.RenderOrPanic("/unit/css_import.hml"),
 		"js_import":  r.RenderOrPanic("/unit/js_import.hml"),
+		"coffee":     coffee(c),
 		"header":     r.RenderOrPanic("/unit/header.hml"),
 		"nav_bar":    Nav_bar(r.Scope["ref"].(string), user),
 		"sign_form":  Sign_form(user),
 	}
 	r.Scope["view"].(map[string]interface{})["head"] =
 		r.RenderOrPanic("/unit/head.hml")
+}
+
+func coffee(c *beego.Controller) string {
+	c.TplName = "unit/coffee.tpl"
+	if coffee, err := c.RenderString(); err != nil {
+		return coffee
+
+	} else {
+		beego.Error(err)
+		return coffee
+	}
 }
 
 func Sign_form(user *models.User) string {

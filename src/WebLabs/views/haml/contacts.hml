@@ -50,6 +50,7 @@
                             %button#submit.btn.btn-default.btn-primary{:type => "submit} Отправить
                             %button.btn.btn-default{:type => "reset} Очистить
 = view.sign_form
+= view.coffee
 %script{:src => "/js/lab3/birthday.js"} stab
 %link{:href => "/css/lab3/modalDialog.css", :rel => "stylesheet"}
 %link{:href => "/css/lab3/popover.css", :rel => "stylesheet"}

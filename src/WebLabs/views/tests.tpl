@@ -131,4 +131,6 @@
 </div>
 {{ end }}
 
-{{ define "load_resources" }}{{ end }}
+{{ define "load_resources" }}
+{{ asset_js  "all" }}
+{{ end }}

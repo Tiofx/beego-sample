@@ -17,3 +17,4 @@
                             = view.table
     %link{:href => "static/css/tableHeadAlign.css", :rel => "stylesheet"}
     = view.sign_form
+    = view.coffee

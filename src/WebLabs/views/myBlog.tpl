@@ -22,6 +22,7 @@
 {{ define "load_resources" }}
     {{ assets_css "/css/lab3/modalDialog.css" }}
     {{ assets_css "/css/lab3/popover.css" }}
+    {{ asset_js  "all" }}
 
     {{ assets_js "/js/lab7/signInForm.js" }}
     {{ assets_js "/js/lab6/guestBookTable.js" }}

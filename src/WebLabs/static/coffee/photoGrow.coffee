@@ -2,9 +2,9 @@ image_number = 1
 img_index = -1
 
 setUpPhotoGrowListeners = ->
-  $('img').click =>
-    $(document.body).append ->
-      createBigPhoto this clondeNode true, $(this) attr "data-index"
+  $('img').click ->
+    $(document.body).append =>
+      createBigPhoto this.cloneNode(true), $(this).attr "data-index"
 
 $(document).ready ->
   setUpPhotoGrowListeners()
@@ -33,7 +33,7 @@ createBigPhoto = (image, index) ->
             src: 'static/img/arrow/left.png'
             alt: 'left'
       )
-      .click =>
+      .click ->
         img_index = $ this
         .parent()
         .parent()
@@ -61,7 +61,7 @@ createBigPhoto = (image, index) ->
             src: 'static/img/arrow/right.png'
             alt: 'right'
       )
-      .click =>
+      .click ->
         img_index = $ this
         .parent()
         .parent()
@@ -77,12 +77,10 @@ createBigPhoto = (image, index) ->
         return
     )
   )
-  .click =>
+  .click ->
     $.when(
       $ this
       .slideUp 'slow'
     )
-    .done =>
-      this.remove()
-    .fadeIn 'slow'
-    return
+    .done => this.remove()
+  .fadeIn 'slow'
